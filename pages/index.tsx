@@ -3,11 +3,11 @@ import { Calculator, Plus, Trash2, Target, DollarSign, TrendingUp, BarChart3, Pe
 
 const MarketplaceCalculator = () => {
   const [formData, setFormData] = useState({
-    targetProfit: 0,
-    hargaJual: 0,
-    hpp: 0,
-    biayaMarketing: 0,
-    biayaOperasional: 0
+    targetProfit: '',
+    hargaJual: '',
+    hpp: '',
+    biayaMarketing: '',
+    biayaOperasional: ''
   });
 
 
@@ -29,6 +29,11 @@ const MarketplaceCalculator = () => {
   nama: string;
   nilai: number;
   tipe: 'persen' | 'nominal';
+};
+
+const toNumber = (value: string): number => {
+  const parsed = parseInt(value);
+  return isNaN(parsed) ? 0 : parsed;
 };
 
 const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
@@ -57,64 +62,63 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
     setBiayaAdmin(biayaAdmin.filter(biaya => biaya.id !== id));
   };
 
-  const calculateResults = () => {
-    const { targetProfit, hargaJual, hpp, biayaMarketing, biayaOperasional } = formData;
-    
-    if (hargaJual <= 0) {
-      setResults(null);
-      return;
+  const targetProfit = toNumber(formData.targetProfit);
+
+
+const toSafeNumber = (value: string | number): number => {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string' && value.trim() !== '') {
+    const num = Number(value);
+    return isNaN(num) ? 0 : num;
+  }
+  return 0;
+};
+
+const calculateResults = () => {
+  const targetProfit = toSafeNumber(formData.targetProfit);
+  const hargaJual = toSafeNumber(formData.hargaJual);
+  const hpp = toSafeNumber(formData.hpp);
+  const biayaMarketing = toSafeNumber(formData.biayaMarketing);
+  const biayaOperasional = toSafeNumber(formData.biayaOperasional);
+
+  if (hargaJual <= 0) {
+    setResults(null);
+    return;
+  }
+
+  let totalBiayaAdminPerUnit = 0;
+  biayaAdmin.forEach(biaya => {
+    if (biaya.tipe === 'persen') {
+      totalBiayaAdminPerUnit += (hargaJual * biaya.nilai) / 100;
+    } else {
+      totalBiayaAdminPerUnit += biaya.nilai;
     }
+  });
 
-    // Hitung total biaya admin per unit
-    let totalBiayaAdminPerUnit = 0;
-    biayaAdmin.forEach(biaya => {
-      if (biaya.tipe === 'persen') {
-        totalBiayaAdminPerUnit += (hargaJual * biaya.nilai) / 100;
-      } else {
-        totalBiayaAdminPerUnit += biaya.nilai;
-      }
-    });
+  const marginPerUnit = hargaJual - totalBiayaAdminPerUnit - hpp - biayaMarketing - biayaOperasional;
+  const targetUnit = marginPerUnit > 0 ? Math.ceil(targetProfit / marginPerUnit) : 0;
+  const targetOmset = targetUnit * hargaJual;
+  const totalBiayaMarketing = targetUnit * biayaMarketing;
+  const totalBiayaAdmin = targetUnit * totalBiayaAdminPerUnit;
+  const totalHPP = targetUnit * hpp;
+  const totalBiayaOperasional = targetUnit * biayaOperasional;
+  const nmv = targetOmset - totalBiayaAdmin;
+  const finalProfit = nmv - totalHPP - totalBiayaMarketing - totalBiayaOperasional;
 
-    // Margin per unit = Harga Jual - Total Biaya Admin - HPP - Biaya Marketing - Biaya Operasional
-    const marginPerUnit = hargaJual - totalBiayaAdminPerUnit - hpp - biayaMarketing - biayaOperasional;
-    
-    // Target Unit = Target Profit / Margin per Unit
-    const targetUnit = marginPerUnit > 0 ? Math.ceil(targetProfit / marginPerUnit) : 0;
-    
-    // Target Omset = Target Unit × Harga Jual
-    const targetOmset = targetUnit * hargaJual;
-    
-    // Total Biaya Marketing = Target Unit × Biaya Marketing per Unit
-    const totalBiayaMarketing = targetUnit * biayaMarketing;
-    
-    // Total Biaya Admin = Target Unit × Total Biaya Admin per Unit
-    const totalBiayaAdmin = targetUnit * totalBiayaAdminPerUnit;
-    
-    // Total HPP = Target Unit × HPP per Unit
-    const totalHPP = targetUnit * hpp;
-    
-    // Total Biaya Operasional = Target Unit × Biaya Operasional per Unit
-    const totalBiayaOperasional = targetUnit * biayaOperasional;
-    
-    // NMV = Omset - Biaya Admin Keseluruhan
-    const nmv = targetOmset - totalBiayaAdmin;
-    
-    // Final Profit = NMV - HPP - Biaya Marketing - Biaya Operasional
-    const finalProfit = nmv - totalHPP - totalBiayaMarketing - totalBiayaOperasional;
+  setResults({
+    targetUnit,
+    targetOmset,
+    totalBiayaMarketing,
+    totalBiayaAdmin,
+    totalHPP,
+    totalBiayaOperasional,
+    nmv,
+    finalProfit,
+    marginPerUnit,
+    totalBiayaAdminPerUnit
+  });
+};
 
-    setResults({
-      targetUnit,
-      targetOmset,
-      totalBiayaMarketing,
-      totalBiayaAdmin,
-      totalHPP,
-      totalBiayaOperasional,
-      nmv,
-      finalProfit,
-      marginPerUnit,
-      totalBiayaAdminPerUnit
-    });
-  };
 
   useEffect(() => {
     calculateResults();
@@ -162,7 +166,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                   <input
                     type="number"
                     value={formData.targetProfit}
-                    onChange={(e) => setFormData({...formData, targetProfit: parseInt(e.target.value) || 0})}
+                    onChange={(e) => setFormData({ ...formData, targetProfit: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
@@ -176,7 +180,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                   <input
                     type="number"
                     value={formData.hargaJual}
-                    onChange={(e) => setFormData({...formData, hargaJual: parseInt(e.target.value) || 0})}
+                    onChange={(e) => setFormData({...formData, hargaJual:e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
@@ -262,7 +266,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                   <input
                     type="number"
                     value={formData.hpp}
-                    onChange={(e) => setFormData({...formData, hpp: parseInt(e.target.value) || 0})}
+                    onChange={(e) => setFormData({...formData, hpp: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
@@ -276,7 +280,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                   <input
                     type="number"
                     value={formData.biayaMarketing}
-                    onChange={(e) => setFormData({...formData, biayaMarketing: parseInt(e.target.value) || 0})}
+                    onChange={(e) => setFormData({...formData, biayaMarketing: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
@@ -290,7 +294,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                   <input
                     type="number"
                     value={formData.biayaOperasional}
-                    onChange={(e) => setFormData({...formData, biayaOperasional: parseInt(e.target.value) || 0})}
+                    onChange={(e) => setFormData({...formData, biayaOperasional: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
@@ -391,15 +395,15 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                 </div>
 
                 {/* Status */}
-                <div className={`rounded-xl shadow-lg p-6 ${results.finalProfit >= formData.targetProfit ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                <div className={`rounded-xl shadow-lg p-6 ${results.finalProfit >= parseInt(formData.targetProfit) ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
                   <div className="text-center">
                     <p className="text-lg font-semibold mb-2">
-                      {results.finalProfit >= formData.targetProfit ? '✅ Target Profit Tercapai' : '❌ Target Profit Belum Tercapai'}
+                      {results.finalProfit >= parseInt(formData.targetProfit) ? '✅ Target Profit Tercapai' : '❌ Target Profit Belum Tercapai'}
                     </p>
                     <p className="text-sm text-gray-600">
-                      Target: {formatCurrency(formData.targetProfit)} | 
+                      Target: {formatCurrency(parseInt(formData.targetProfit))} | 
                       Actual: {formatCurrency(results.finalProfit)} | 
-                      Selisih: {formatCurrency(results.finalProfit - formData.targetProfit)}
+                      Selisih: {formatCurrency(results.finalProfit - parseInt(formData.targetProfit))}
                     </p>
                   </div>
                 </div>
