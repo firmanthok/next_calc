@@ -10,11 +10,32 @@ const MarketplaceCalculator = () => {
     biayaOperasional: 0
   });
 
-  const [biayaAdmin, setBiayaAdmin] = useState([
-    { id: 1, nama: 'Komisi Platform', nilai: 2.5, tipe: 'persen' }
-  ]);
 
-  const [results, setResults] = useState(null);
+    type HasilPerhitungan = {
+    targetUnit: number;
+    targetOmset: number;
+    totalBiayaMarketing: number;
+    totalBiayaAdmin: number;
+    totalHPP: number;
+    totalBiayaOperasional: number;
+    nmv: number;
+    finalProfit: number;
+    marginPerUnit: number;
+    totalBiayaAdminPerUnit: number;
+  };
+
+  type BiayaAdmin = {
+  id: number;
+  nama: string;
+  nilai: number;
+  tipe: 'persen' | 'nominal';
+};
+
+const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
+  { id: 1, nama: 'Komisi Platform', nilai: 2.5, tipe: 'persen' }
+]);
+
+  const [results, setResults] = useState<HasilPerhitungan | null>(null);
 
   const addBiayaAdmin = () => {
     const newId = Math.max(...biayaAdmin.map(b => b.id), 0) + 1;
@@ -26,7 +47,7 @@ const MarketplaceCalculator = () => {
     }]);
   };
 
-  const updateBiayaAdmin = (id:any, field:any, value:any) => {
+  const updateBiayaAdmin = (id:number, field:keyof BiayaAdmin, value:any) => {
     setBiayaAdmin(biayaAdmin.map(biaya => 
       biaya.id === id ? { ...biaya, [field]: value } : biaya
     ));
