@@ -17,7 +17,7 @@ type BiayaTipe = 'persen' | 'nominal';
 interface BiayaAdmin {
   id: number;
   nama: string;
-  nilai: number;
+  nilai: string;
   tipe: BiayaTipe;
 }
 
@@ -46,17 +46,17 @@ const MarketplaceCalculator: React.FC = () => {
   });
 
   const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
-    { id: 1, nama: 'Komisi Platform', nilai: 2.5, tipe: 'persen' }
+    { id: 1, nama: 'Komisi Platform', nilai: '2.5', tipe: 'persen' }
   ]);
 
   const [results, setResults] = useState<Results | null>(null);
 
   const addBiayaAdmin = () => {
     const newId = Math.max(...biayaAdmin.map(b => b.id), 0) + 1;
-    setBiayaAdmin([...biayaAdmin, { id: newId, nama: '', nilai: 0, tipe: 'persen' }]);
+    setBiayaAdmin([...biayaAdmin, { id: newId, nama: '', nilai: '', tipe: 'persen' }]);
   };
 
-  const updateBiayaAdmin = (id: number, field: keyof BiayaAdmin, value: string | number) => {
+  const updateBiayaAdmin = (id: number, field: keyof BiayaAdmin, value: string) => {
     setBiayaAdmin(biayaAdmin.map(biaya =>
       biaya.id === id ? { ...biaya, [field]: value } : biaya
     ));
@@ -80,9 +80,10 @@ const MarketplaceCalculator: React.FC = () => {
 
     let totalBiayaAdminPerUnit = 0;
     biayaAdmin.forEach(biaya => {
+      const nilai = parseFloat(biaya.nilai) || 0;
       totalBiayaAdminPerUnit += biaya.tipe === 'persen'
-        ? (hargaJual * biaya.nilai) / 100
-        : biaya.nilai;
+        ? (hargaJual * nilai) / 100
+        : nilai;
     });
 
     const marginPerUnit = hargaJual - totalBiayaAdminPerUnit - hpp - biayaMarketing - biayaOperasional;
@@ -210,7 +211,7 @@ const MarketplaceCalculator: React.FC = () => {
                       <input
                         type="number"
                         value={biaya.nilai}
-                        onChange={(e) => updateBiayaAdmin(biaya.id, 'nilai', parseFloat(e.target.value) || 0)}
+                        onChange={(e) => updateBiayaAdmin(biaya.id, 'nilai', e.target.value)}
                         placeholder="0"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-black"
                         step="0.1"
@@ -221,7 +222,7 @@ const MarketplaceCalculator: React.FC = () => {
                       <select
                         value={biaya.tipe}
                         onChange={(e) => updateBiayaAdmin(biaya.id, 'tipe', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-black"
                       >
                         <option value="persen">%</option>
                         <option value="nominal">Rp</option>
@@ -378,19 +379,21 @@ const MarketplaceCalculator: React.FC = () => {
                           <span className="font-medium text-green-600">{formatCurrency(results.targetOmset)}</span>
                         </div>
                         
-                        {/* Breakdown Biaya Admin per Item */}
+                        {/* Breakdown Biaya Admin per Item */}{}
                         <div className="ml-4 space-y-1 bg-gray-50 rounded-lg p-3">
                           <p className="text-sm font-medium text-gray-700 mb-2">Breakdown Biaya Admin:</p>
                           {biayaAdmin.map((biaya) => {
+                            const nilai = parseFloat(biaya.nilai) || 0;
+                            const harga = toNumber(formData.hargaJual); // pastikan ini number
                             const biayaPerUnit = biaya.tipe === 'persen' 
-                              ? (parseInt(formData.hargaJual) * biaya.nilai) / 100 
-                              : biaya.nilai;
+                              ? (harga * nilai) / 100 
+                              : nilai;
                             const totalBiayaItem = biayaPerUnit * results.targetUnit;
                             
                             return (
                               <div key={biaya.id} className="flex justify-between text-sm">
                                 <span className="text-gray-600">
-                                  {biaya.nama || 'Biaya Admin'} ({biaya.tipe === 'persen' ? `${biaya.nilai}%` : formatCurrency(biaya.nilai)} per unit)
+                                  {biaya.nama || 'Biaya Admin'} ({biaya.tipe === 'persen' ? `${biaya.nilai}%` : formatCurrency(parseInt(biaya.nilai))} per unit)
                                 </span>
                                 <span className="font-medium text-red-600">-{formatCurrency(totalBiayaItem)}</span>
                               </div>
@@ -446,7 +449,7 @@ const MarketplaceCalculator: React.FC = () => {
                 {/* Status */}
                 <div className={`rounded-xl shadow-lg p-6 ${results.finalProfit >= parseInt(formData.targetProfit) ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
                   <div className="text-center">
-                    <p className="text-lg font-semibold mb-2">
+                    <p className="text-lg font-semibold mb-2 text-black">
                       {results.finalProfit >= parseInt(formData.targetProfit) ? '✅ Target Profit Tercapai' : '❌ Target Profit Belum Tercapai'}
                     </p>
                     <p className="text-sm text-gray-600">
@@ -464,7 +467,23 @@ const MarketplaceCalculator: React.FC = () => {
                 <p className="text-gray-500">Isi semua field untuk melihat hasil perhitungan</p>
               </div>
             )}
+
+
           </div>
+          
+<div className="col-span-2 mt-2 text-center border-t pt-2 ">
+  <p className="text-gray-700 text-sm mb-4">Butuh Konsultasi IT Profesional untuk Bisnismu?</p>
+  <a
+    href="https://wa.me/6285731268396?text=Halo%2C%20saya%20tertarik%20jasa%20konsultasi%20IT..."
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-block bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-5 py-3 rounded-lg transition"
+  >
+    💬 Konsultasi Gratis via WhatsApp
+  </a>
+</div>
+
+
         </div>
       </div>
     </div>
