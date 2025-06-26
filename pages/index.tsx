@@ -31,11 +31,6 @@ const MarketplaceCalculator = () => {
   tipe: 'persen' | 'nominal';
 };
 
-const toNumber = (value: string): number => {
-  const parsed = parseInt(value);
-  return isNaN(parsed) ? 0 : parsed;
-};
-
 const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
   { id: 1, nama: 'Komisi Platform', nilai: 2.5, tipe: 'persen' }
 ]);
