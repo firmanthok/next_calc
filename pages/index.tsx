@@ -62,8 +62,6 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
     setBiayaAdmin(biayaAdmin.filter(biaya => biaya.id !== id));
   };
 
-  const targetProfit = toNumber(formData.targetProfit);
-
 
 const toSafeNumber = (value: string | number): number => {
   if (typeof value === 'number') return value;
