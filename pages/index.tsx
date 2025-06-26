@@ -47,7 +47,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
     }]);
   };
 
-  const updateBiayaAdmin = (id:number, field:keyof BiayaAdmin, value:any) => {
+  const updateBiayaAdmin = (id:number, field:keyof BiayaAdmin, value:number) => {
     setBiayaAdmin(biayaAdmin.map(biaya => 
       biaya.id === id ? { ...biaya, [field]: value } : biaya
     ));
@@ -208,7 +208,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                       <input
                         type="text"
                         value={biaya.nama}
-                        onChange={(e) => updateBiayaAdmin(biaya.id, 'nama', e.target.value)}
+                        onChange={(e) => updateBiayaAdmin(biaya.id, 'nama', parseFloat(e.target.value))}
                         placeholder="Nama biaya"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                       />
@@ -227,7 +227,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                     <div className="col-span-3">
                       <select
                         value={biaya.tipe}
-                        onChange={(e) => updateBiayaAdmin(biaya.id, 'tipe', e.target.value)}
+                        onChange={(e) => updateBiayaAdmin(biaya.id, 'tipe', parseFloat(e.target.value))}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                       >
                         <option value="persen">%</option>
