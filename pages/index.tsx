@@ -26,13 +26,13 @@ const MarketplaceCalculator = () => {
     }]);
   };
 
-  const updateBiayaAdmin = (id, field, value) => {
+  const updateBiayaAdmin = (id:any, field:any, value:any) => {
     setBiayaAdmin(biayaAdmin.map(biaya => 
       biaya.id === id ? { ...biaya, [field]: value } : biaya
     ));
   };
 
-  const deleteBiayaAdmin = (id) => {
+  const deleteBiayaAdmin = (id:any) => {
     setBiayaAdmin(biayaAdmin.filter(biaya => biaya.id !== id));
   };
 
@@ -99,7 +99,7 @@ const MarketplaceCalculator = () => {
     calculateResults();
   }, [formData, biayaAdmin]);
 
-  const formatCurrency = (amount) => {
+  const formatCurrency = (amount:any) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
@@ -107,7 +107,7 @@ const MarketplaceCalculator = () => {
     }).format(amount);
   };
 
-  const formatNumber = (num) => {
+  const formatNumber = (num:number) => {
     return new Intl.NumberFormat('id-ID').format(num);
   };
 
