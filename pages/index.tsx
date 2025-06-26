@@ -53,7 +53,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
     ));
   };
 
-  const deleteBiayaAdmin = (id:any) => {
+  const deleteBiayaAdmin = (id:number) => {
     setBiayaAdmin(biayaAdmin.filter(biaya => biaya.id !== id));
   };
 
@@ -120,7 +120,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
     calculateResults();
   }, [formData, biayaAdmin]);
 
-  const formatCurrency = (amount:any) => {
+  const formatCurrency = (amount:number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
