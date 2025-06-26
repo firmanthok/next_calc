@@ -163,7 +163,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                     type="number"
                     value={formData.targetProfit}
                     onChange={(e) => setFormData({...formData, targetProfit: parseInt(e.target.value) || 0})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
                   />
@@ -177,7 +177,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                     type="number"
                     value={formData.hargaJual}
                     onChange={(e) => setFormData({...formData, hargaJual: parseInt(e.target.value) || 0})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
                   />
@@ -210,7 +210,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                         value={biaya.nama}
                         onChange={(e) => updateBiayaAdmin(biaya.id, 'nama', e.target.value)}
                         placeholder="Nama biaya"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-black"
                       />
                     </div>
                     <div className="col-span-3">
@@ -219,7 +219,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                         value={biaya.nilai}
                         onChange={(e) => updateBiayaAdmin(biaya.id, 'nilai', e.target.value)}
                         placeholder="0"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm text-black"
                         step="0.1"
                         min="0"
                       />
@@ -263,7 +263,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                     type="number"
                     value={formData.hpp}
                     onChange={(e) => setFormData({...formData, hpp: parseInt(e.target.value) || 0})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
                   />
@@ -277,7 +277,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                     type="number"
                     value={formData.biayaMarketing}
                     onChange={(e) => setFormData({...formData, biayaMarketing: parseInt(e.target.value) || 0})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
                   />
@@ -291,7 +291,7 @@ const [biayaAdmin, setBiayaAdmin] = useState<BiayaAdmin[]>([
                     type="number"
                     value={formData.biayaOperasional}
                     onChange={(e) => setFormData({...formData, biayaOperasional: parseInt(e.target.value) || 0})}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     placeholder="0"
                     min="0"
                   />
