@@ -468,9 +468,9 @@ const MarketplaceCalculator: React.FC = () => {
               </div>
             )}
 <div className="mt-2 text-center border-t pt-2 ">
-  <p className="text-gray-700 text-sm mb-4">Butuh Konsultasi IT Profesional untuk Bisnismu?</p>
+  <p className="text-gray-700 text-sm mb-4">Butuh Konsultasi IT Program atau WebApps Profesional untuk Bisnismu?</p>
   <a
-    href="https://wa.me/6285731268396?text=Halo%2C%20saya%20tertarik%20jasa%20konsultasi%20IT..."
+    href="https://wa.me/6285731268396?text=Halo%2C%20saya%20tertarik%20jasa%20konsultasi%20WebApp..."
     target="_blank"
     rel="noopener noreferrer"
     className="inline-block bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-5 py-3 rounded-lg transition"
