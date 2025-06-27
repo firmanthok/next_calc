@@ -467,11 +467,7 @@ const MarketplaceCalculator: React.FC = () => {
                 <p className="text-gray-500">Isi semua field untuk melihat hasil perhitungan</p>
               </div>
             )}
-
-
-          </div>
-          
-<div className="col-span-2 mt-2 text-center border-t pt-2 ">
+<div className="mt-2 text-center border-t pt-2 ">
   <p className="text-gray-700 text-sm mb-4">Butuh Konsultasi IT Profesional untuk Bisnismu?</p>
   <a
     href="https://wa.me/6285731268396?text=Halo%2C%20saya%20tertarik%20jasa%20konsultasi%20IT..."
@@ -482,6 +478,10 @@ const MarketplaceCalculator: React.FC = () => {
     💬 Konsultasi Gratis via WhatsApp
   </a>
 </div>
+
+          </div>
+          
+
 
 
         </div>
